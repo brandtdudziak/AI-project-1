@@ -145,10 +145,9 @@ class Node:
     def getActionList(self):
         actions = [self.action]
         parentNode = self.parent
-        while parentNode != None:
+        while parentNode.parent != None:
             actions.append(parentNode.action)
             parentNode = parentNode.parent
-        actions = actions[:-1]
         actions.reverse()
         return actions
 
