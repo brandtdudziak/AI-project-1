@@ -102,7 +102,8 @@ def depthFirstSearch(problem):
         node = frontier.pop()
         # Check goal state
         if problem.isGoalState(node.state):
-             return node.getActionList()
+            print node.getActionList()
+            return node.getActionList()
         explored.update({node.state : True})
         # Expand children
         for action in problem.getSuccessors(node.state):
@@ -147,6 +148,7 @@ class Node:
         while parentNode != None:
             actions.append(parentNode.action)
             parentNode = parentNode.parent
+        actions = actions[:-1]
         actions.reverse()
         return actions
 
