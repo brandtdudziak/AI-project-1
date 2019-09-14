@@ -73,7 +73,10 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 def isInFrontier(frontier, state):
-    return state in frontier.list
+    for node in frontier.list:
+        if node.state == state:
+            return True
+    return False
 
 def depthFirstSearch(problem):
     """
