@@ -105,13 +105,12 @@ def depthFirstSearch(problem):
         node = frontier.pop()
         # Check goal state
         if problem.isGoalState(node.state):
-            print node.getActionList()
             return node.getActionList()
         explored.update({node.state : True})
         # Expand children
         for action in problem.getSuccessors(node.state):
             child = Node(node, action[1], action[0])
-            if explored.get(child.state) is None and not isInFrontier(frontier, child.state):
+            if explored.get(child.state) is None:
                 frontier.push(child)
 
     util.raiseNotDefined()
@@ -130,7 +129,6 @@ def breadthFirstSearch(problem):
         node = frontier.pop()
         # Check goal state
         if problem.isGoalState(node.state):
-            print node.getActionList()
             return node.getActionList()
         explored.update({node.state : True})
         # Expand children
