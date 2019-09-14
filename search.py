@@ -72,6 +72,9 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
+def isInFrontier(frontier, state):
+    return state in frontier.list
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -101,7 +104,7 @@ def depthFirstSearch(problem):
         # Expand children
         for action in node.state.getSuccessors():
             child = Node(node, action[1], action[0])
-            if explored.get(child.state) is None and #Not in fronteir:
+            if explored.get(child.state) is None and !isInFrontier(frontier, child.state):
                 frontier.push(child)
 
     util.raiseNotDefined()
