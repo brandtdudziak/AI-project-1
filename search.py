@@ -89,9 +89,11 @@ def depthFirstSearch(problem):
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
-    "*** YOUR CODE HERE ***"
+
     node = Node(None, None, problem.getStartState())
-    if problem.isGoalState() return node.getActionList()
+    if problem.isGoalState(node.state):
+         return node.getActionList()
+
     frontier = util.Stack()
     frontier.push(node)
     explored = {}
@@ -99,12 +101,13 @@ def depthFirstSearch(problem):
     while not frontier.isEmpty():
         node = frontier.pop()
         # Check goal state
-        if problem.isGoalState(node.state) return node.getActionList()
+        if problem.isGoalState(node.state):
+             return node.getActionList()
         explored.update({node.state : True})
         # Expand children
-        for action in node.state.getSuccessors():
+        for action in problem.getSuccessors(node.state):
             child = Node(node, action[1], action[0])
-            if explored.get(child.state) is None and !isInFrontier(frontier, child.state):
+            if explored.get(child.state) is None and not isInFrontier(frontier, child.state):
                 frontier.push(child)
 
     util.raiseNotDefined()
