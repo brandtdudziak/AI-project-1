@@ -114,6 +114,7 @@ def depthFirstSearch(problem):
             if explored.get(child.state) is None and not isInFrontier(frontier, child.state):
                 frontier.push(child)
 
+    return None
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
@@ -138,6 +139,8 @@ def breadthFirstSearch(problem):
             child = Node(node, action[1], action[0])
             if explored.get(child.state) is None and not isInFrontier(frontier, child.state):
                 frontier.push(child)
+
+    return None
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
