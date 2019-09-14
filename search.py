@@ -95,8 +95,14 @@ def depthFirstSearch(problem):
 
     while not frontier.isEmpty():
         node = frontier.pop()
+        # Check goal state
+        if problem.isGoalState(node.state) return node.getActionList()
         explored.update({node.state : True})
-        for 
+        # Expand children
+        for action in node.state.getSuccessors():
+            child = Node(node, action[1], action[0])
+            if explored.get(child.state) is None and #Not in fronteir:
+                frontier.push(child)
 
     util.raiseNotDefined()
 
