@@ -88,6 +88,15 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
     node = Node(None, None, problem.getStartState())
+    if problem.isGoalState() return node.getActionList()
+    frontier = util.Stack()
+    frontier.push(node)
+    explored = {}
+
+    while not frontier.isEmpty():
+        node = frontier.pop()
+        explored.update({node.state : True})
+        for 
 
     util.raiseNotDefined()
 
