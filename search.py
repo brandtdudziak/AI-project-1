@@ -120,15 +120,6 @@ class Node:
         self.action = action
         self.state = state
 
-    def getActionList(self):
-        actions = [self.action]
-        parentNode = self.parent
-        while parentNode != None:
-            actions.append(parentNode.action)
-            parentNode = parentNode.parent
-        actions.reverse()
-        return actions
-
 # Abbreviations
 bfs = breadthFirstSearch
 dfs = depthFirstSearch
