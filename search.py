@@ -168,11 +168,6 @@ def uniformCostSearch(problem):
     return None
     util.raiseNotDefined()
 
-def uniformCostSearch(problem):
-    """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
-
 def nullHeuristic(state, problem=None):
     """
     A heuristic function estimates the cost from the current state to the nearest
@@ -195,9 +190,11 @@ class Node:
     def getActionList(self):
         actions = [self.action]
         parentNode = self.parent
-        while parentNode.parent != None:
+        # Need to switch this back. Doesnt work if the solution is the first node
+        while parentNode!= None:
             actions.append(parentNode.action)
             parentNode = parentNode.parent
+        actions = actions[:-1]
         actions.reverse()
         return actions
 

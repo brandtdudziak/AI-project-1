@@ -38,3 +38,4 @@ ghostAgents.pyc
 graphicsDisplay.pyc
 graphicsUtils.pyc
 pacmanAgents.pyc
+*.pyc
