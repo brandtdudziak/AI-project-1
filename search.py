@@ -72,11 +72,6 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
-def isInFrontier(frontier, state):
-    for node in frontier.list:
-        if node.state == state:
-            return True
-    return False
 
 def depthFirstSearch(problem):
     """
@@ -106,14 +101,16 @@ def depthFirstSearch(problem):
         # Check goal state
         if problem.isGoalState(node.state):
             return node.getActionList()
-        explored.update({node.state : True})
-        # Expand children
-        for action in problem.getSuccessors(node.state):
-            child = Node(node, action[1], action[0])
-            if explored.get(child.state) is None:
+
+        if explored.get(node.state) is None:
+            # Update explored
+            explored.update({node.state : True})
+
+            # Expand children
+            for action in problem.getSuccessors(node.state):
+                child = Node(node, action[1], action[0])
                 frontier.push(child)
 
-    return None
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
@@ -131,12 +128,42 @@ def breadthFirstSearch(problem):
         # Check goal state
         if problem.isGoalState(node.state):
             return node.getActionList()
-        explored.update({node.state : True})
-        # Expand children
-        for action in problem.getSuccessors(node.state):
-            child = Node(node, action[1], action[0])
-            if explored.get(child.state) is None and not isInFrontier(frontier, child.state):
+
+        if explored.get(node.state) is None:
+            # Update explored
+            explored.update({node.state : True})
+
+            # Expand children
+            for action in problem.getSuccessors(node.state):
+                child = Node(node, action[1], action[0])
                 frontier.push(child)
+
+    util.raiseNotDefined()
+
+def uniformCostSearch(problem):
+    """Search the node of least total cost first."""
+    node = Node(None, None, problem.getStartState())
+    if problem.isGoalState(node.state):
+         return node.getActionList()
+
+    frontier = util.PriorityQueue()
+    frontier.push(node, problem.getCostOfActions(node.getActionList()))
+    explored = {}
+
+    while not frontier.isEmpty():
+        node = frontier.pop()
+        # Check goal state
+        if problem.isGoalState(node.state):
+            return node.getActionList()
+
+        if explored.get(node.state) is None:
+            # Update explored
+            explored.update({node.state : True})
+
+            # Expand children
+            for action in problem.getSuccessors(node.state):
+                child = Node(node, action[1], action[0])
+                frontier.push(child, problem.getCostOfActions(child.getActionList()))
 
     return None
     util.raiseNotDefined()
