@@ -111,6 +111,7 @@ def depthFirstSearch(problem):
                 child = Node(node, action[1], action[0])
                 frontier.push(child)
 
+    return None
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
@@ -138,6 +139,7 @@ def breadthFirstSearch(problem):
                 child = Node(node, action[1], action[0])
                 frontier.push(child)
 
+    return None
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
