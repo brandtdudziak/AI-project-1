@@ -288,7 +288,7 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
 
-        self.startingState = (startingGameState.getPacmanPosition(), list(self.corners))
+        self.startingState = (startingGameState.getPacmanPosition(), self.corners)
 
     def getStartState(self):
         """
@@ -302,7 +302,10 @@ class CornersProblem(search.SearchProblem):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        return len(state[1]) == 0
+        for elem in state[1]:
+            if elem != True:
+                return False
+        return True
 
         util.raiseNotDefined()
 
@@ -317,8 +320,13 @@ class CornersProblem(search.SearchProblem):
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
         """
-        if state in self.startingState[1]:
-            self.startingState[1].remove(state)
+
+
+        if state[0] in self.corners:
+            for i in range(4):
+                if state[0] == state[1][i]:
+                    state[1][i] = True
+                    break
 
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
@@ -328,11 +336,11 @@ class CornersProblem(search.SearchProblem):
             #   dx, dy = Actions.directionToVector(action)
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
-            x,y = state
+            x,y = state[0]
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             if not self.walls[nextx][nexty]:
-                nextState = (nextx, nexty)
+                nextState = ((nextx, nexty), state[1])
                 successors.append( ( nextState, action, 1) )
 
         self._expanded += 1 # DO NOT CHANGE
