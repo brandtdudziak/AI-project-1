@@ -302,7 +302,7 @@ class CornersProblem(search.SearchProblem):
         """
         Returns whether this search state is a goal state of the problem.
         """
-
+        return len(state[1]) == 0
 
         util.raiseNotDefined()
 
@@ -317,8 +317,8 @@ class CornersProblem(search.SearchProblem):
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
         """
-        if state in self.corners:
-            self.checkedCorners.add(state)
+        if state in self.startingState[1]:
+            self.startingState[1].remove(state)
 
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
