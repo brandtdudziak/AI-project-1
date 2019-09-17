@@ -279,6 +279,7 @@ class CornersProblem(search.SearchProblem):
         """
         self.walls = startingGameState.getWalls()
         self.startingPosition = startingGameState.getPacmanPosition()
+        print self.startingPosition
         top, right = self.walls.height-2, self.walls.width-2
         self.corners = ((1,1), (1,top), (right, 1), (right, top))
         for corner in self.corners:
@@ -287,7 +288,8 @@ class CornersProblem(search.SearchProblem):
         self._expanded = 0 # DO NOT CHANGE; Number of search nodes expanded
         # Please add any code here which you would like to use
         # in initializing the problem
-        "*** YOUR CODE HERE ***"
+
+        self.checkedCorners = set()
 
     def getStartState(self):
         """
@@ -301,11 +303,11 @@ class CornersProblem(search.SearchProblem):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        for corner in self.corners:
-            if state.hasFood(corner):
-                return False
+        if len(self.checkedCorners) == len(self.corners):
+            return True
 
-        return True
+        return False
+
         util.raiseNotDefined()
 
 
@@ -319,6 +321,8 @@ class CornersProblem(search.SearchProblem):
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
         """
+        if state in self.corners:
+            self.checkedCorners.add(state)
 
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
@@ -328,13 +332,12 @@ class CornersProblem(search.SearchProblem):
             #   dx, dy = Actions.directionToVector(action)
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
-            x,y = state[0]
+            x,y = state
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             if not self.walls[nextx][nexty]:
-                nextFood = state[1].copy()
-                nextFood[nextx][nexty] = False
-                successors.append( ( ((nextx, nexty), nextFood), action, 1) )
+                nextState = (nextx, nexty)
+                successors.append( ( nextState, action, 1) )
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
