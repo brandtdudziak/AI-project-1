@@ -40,6 +40,7 @@ from game import Actions
 import util
 import time
 import search
+import math
 
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
@@ -378,6 +379,7 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     distance = 999999
+    farthest = 0
     totalDistance = 0
 
     for elem in state[1]:
@@ -387,7 +389,10 @@ def cornersHeuristic(state, problem):
             if distance > newDistance:
                 distance = newDistance
 
-    return distance + totalDistance/2
+            if newDistance > farthest:
+                farthest = newDistance
+
+    return distance #+ totalDistance**1/2
 
     return 0 # Default to trivial solution
 
