@@ -303,7 +303,7 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         for elem in state[1]:
-            if elem != True:
+            if elem != True and elem != state[0]:
                 return False
         return True
 
@@ -377,7 +377,14 @@ def cornersHeuristic(state, problem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
-    "*** YOUR CODE HERE ***"
+    totalDistance = 0
+
+    for elem in state[1]:
+        if elem != True:
+            totalDistance += abs(elem[0] - state[0][0]) + abs(elem[1] - state[0][1])
+
+    return totalDistance
+
     return 0 # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
