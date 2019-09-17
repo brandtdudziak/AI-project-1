@@ -288,24 +288,21 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
 
-        self.startingState = (startingGameState.getPacmanPosition(), self.corners)
+        self.startingState = (startingGameState.getPacmanPosition(), list(self.corners))
 
     def getStartState(self):
         """
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-        return self.startingPosition
+        return self.startingState
         util.raiseNotDefined()
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        if len(self.checkedCorners) == len(self.corners):
-            return True
 
-        return False
 
         util.raiseNotDefined()
 
