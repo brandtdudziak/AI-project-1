@@ -321,11 +321,12 @@ class CornersProblem(search.SearchProblem):
             is the incremental cost of expanding to that successor
         """
 
+        checked = list(state[1])
 
         if state[0] in self.corners:
             for i in range(4):
-                if state[0] == state[1][i]:
-                    state[1][i] = True
+                if state[0] == checked[i]:
+                    checked[i] = True
                     break
 
         successors = []
@@ -340,7 +341,7 @@ class CornersProblem(search.SearchProblem):
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             if not self.walls[nextx][nexty]:
-                nextState = ((nextx, nexty), state[1])
+                nextState = ((nextx, nexty), tuple(checked))
                 successors.append( ( nextState, action, 1) )
 
         self._expanded += 1 # DO NOT CHANGE
