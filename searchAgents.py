@@ -378,21 +378,52 @@ def cornersHeuristic(state, problem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
-    distance = 999999
-    farthest = 0
-    totalDistance = 0
+    # Stack of distances
+    goals = []
+    corners = list(state[1])
 
-    for elem in state[1]:
-        if elem != True:
-            newDistance = abs(elem[0] - state[0][0]) + abs(elem[1] - state[0][1])
-            totalDistance += newDistance
-            if distance > newDistance:
-                distance = newDistance
+    # Only keep distance values
+    while True in corners:
+        corners.remove(True)
 
-            if newDistance > farthest:
-                farthest = newDistance
+    while len(corners) > 0:
+        # If nothing is in goals, compare distances to current state
+        if len(goals) == 0:
+            distance = 999999
+            nearestCorner = None
+            # Get the smallest distance to goal from current state
+            for elem in corners:
+                md = abs(elem[0] - state[0][0]) + abs(elem[1] - state[0][1])
+                if distance > md:
+                    distance = md
+                    nearestCorner = elem
+            if nearestCorner:
+                # Update stack of goals with [goal position, manhattan distance]
+                goals.append([nearestCorner, distance])
+                # Remove closest node from corners list
+                corners.remove(nearestCorner)
 
-    return distance #+ totalDistance**1/2
+        else:
+            distance = 999999
+            nearestCorner = None
+            # Get the smallest distance to last appended goal in goals
+            for elem in corners:
+                md = abs(elem[0] - goals[-1][0][0]) + abs(elem[1] - goals[-1][0][1])
+                if distance > md:
+                    distance = md
+                    nearestCorner = elem
+            if nearestCorner:
+                # Update stack of goals with [goal position, manhattan distance]
+                goals.append([nearestCorner, distance])
+                # Remove closest node from corners list
+                corners.remove(nearestCorner)
+
+    # Calculate final path cost based on distances in goals
+    final_path = 0
+    for goal in goals:
+        final_path += goal[1]
+
+    return final_path
 
     return 0 # Default to trivial solution
 
