@@ -531,6 +531,9 @@ def foodHeuristic(state, problem):
     # Sort list based on distance to position
     coordinates = sorted(coordinates, key=lambda x:x[1])
 
+    if len(coordinates) > 2:
+        coordinates = coordinates[:2]
+
     for elem in coordinates:
         elem = elem[0]
         # Stack of distances
@@ -557,6 +560,7 @@ def foodHeuristic(state, problem):
         new_final_path = 0
         for goal in goals:
             new_final_path += goal[1]
+
         if new_final_path < final_path:
             final_path = new_final_path
 
