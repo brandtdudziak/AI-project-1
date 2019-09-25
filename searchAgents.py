@@ -519,28 +519,26 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
 
-    # Stack of distances
-    goals = []
     coordinates = foodGrid.asList()
 
-    while len(coordinates) > 0:
-        # If nothing is in goals, compare distances to current state
-        if len(goals) == 0:
-            distance = 999999
-            nearestFood = None
-            # Get the smallest distance to goal from current state
-            for elem in coordinates:
-                md = abs(elem[0] - position[0]) + abs(elem[1] - position[1])
-                if distance > md:
-                    distance = md
-                    nearestFood = elem
-            if nearestFood:
-                # Update stack of goals with [goal position, manhattan distance]
-                goals.append([nearestFood, distance])
-                # Remove closest node from coordinates list
-                coordinates.remove(nearestFood)
+    for i in range(len(coordinates)):
+        elem = coordinates[i]
+        md = abs(elem[0] - position[0]) + abs(elem[1] - position[1])
+        coordinates[i] = [elem, md]
 
-        else:
+    final_path = 999999
+
+    # Sort list based on distance to position
+    coordinates = sorted(coordinates, key=lambda x:x[1])
+
+    for elem in coordinates:
+        elem = elem[0]
+        # Stack of distances
+        goals = []
+        md = abs(elem[0] - position[0]) + abs(elem[1] - position[1])
+        coordinates.remove(elem)
+        goals.append([elem, md])
+        while len(coordinates) > 0:
             distance = 999999
             nearestFood = None
             # Get the smallest distance to last appended goal in goals
@@ -555,10 +553,12 @@ def foodHeuristic(state, problem):
                 # Remove closest node from coordinates list
                 coordinates.remove(nearestFood)
 
-    # Calculate final path cost based on distances in goals
-    final_path = 0
-    for goal in goals:
-        final_path += goal[1]
+        # Calculate final path cost based on distances in goals
+        new_final_path = 0
+        for goal in goals:
+            new_final_path += goal[1]
+        if new_final_path < final_path:
+            final_path = new_final_path
 
     return final_path
 
