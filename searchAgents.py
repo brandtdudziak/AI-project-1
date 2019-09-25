@@ -526,26 +526,28 @@ def foodHeuristic(state, problem):
         md = abs(elem[0] - position[0]) + abs(elem[1] - position[1])
         coordinates[i] = [elem, md]
 
-    final_path = 999999
 
     # Sort list based on distance to position
     coordinates = sorted(coordinates, key=lambda x:x[1])
+    final_path = 999999
 
-    if len(coordinates) > 2:
-        coordinates = coordinates[:2]
+    if len(coordinates) == 0:
+        return 0
 
     for elem in coordinates:
         elem = elem[0]
         # Stack of distances
         goals = []
+        remaining = foodGrid.asList()
+        remaining.remove(elem)
+
         md = abs(elem[0] - position[0]) + abs(elem[1] - position[1])
-        coordinates.remove(elem)
         goals.append([elem, md])
-        while len(coordinates) > 0:
+        while len(remaining) > 0:
             distance = 999999
             nearestFood = None
             # Get the smallest distance to last appended goal in goals
-            for elem in coordinates:
+            for elem in remaining:
                 md = abs(elem[0] - goals[-1][0][0]) + abs(elem[1] - goals[-1][0][1])
                 if distance > md:
                     distance = md
@@ -554,7 +556,7 @@ def foodHeuristic(state, problem):
                 # Update stack of goals with [goal position, manhattan distance]
                 goals.append([nearestFood, distance])
                 # Remove closest node from coordinates list
-                coordinates.remove(nearestFood)
+                remaining.remove(nearestFood)
 
         # Calculate final path cost based on distances in goals
         new_final_path = 0
