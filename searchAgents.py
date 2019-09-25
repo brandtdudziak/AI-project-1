@@ -598,7 +598,13 @@ class ClosestDotSearchAgent(SearchAgent):
         walls = gameState.getWalls()
         problem = AnyFoodSearchProblem(gameState)
 
-        "*** YOUR CODE HERE ***"
+        self.searchFunction = search.aStarSearch(problem)
+        self.searchType = problem
+
+        # agent = SearchAgent(fn='depthFirstSearch', prob='AnyFoodSearchProblem', heuristic='nullHeuristic')
+        # agent.registerInitialState(gameState)
+        # return agent.getAction(gameState)
+        return self.searchFunction
         util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
@@ -633,8 +639,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         complete the problem definition.
         """
         x,y = state
-
-        "*** YOUR CODE HERE ***"
+        return self.food[x][y] == True
         util.raiseNotDefined()
 
 def mazeDistance(point1, point2, gameState):
