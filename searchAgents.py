@@ -518,7 +518,50 @@ def foodHeuristic(state, problem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
-    "*** YOUR CODE HERE ***"
+
+    # Stack of distances
+    goals = []
+    coordinates = foodGrid.asList()
+
+    while len(coordinates) > 0:
+        # If nothing is in goals, compare distances to current state
+        if len(goals) == 0:
+            distance = 999999
+            nearestFood = None
+            # Get the smallest distance to goal from current state
+            for elem in coordinates:
+                md = abs(elem[0] - position[0]) + abs(elem[1] - position[1])
+                if distance > md:
+                    distance = md
+                    nearestFood = elem
+            if nearestFood:
+                # Update stack of goals with [goal position, manhattan distance]
+                goals.append([nearestFood, distance])
+                # Remove closest node from coordinates list
+                coordinates.remove(nearestFood)
+
+        else:
+            distance = 999999
+            nearestFood = None
+            # Get the smallest distance to last appended goal in goals
+            for elem in coordinates:
+                md = abs(elem[0] - goals[-1][0][0]) + abs(elem[1] - goals[-1][0][1])
+                if distance > md:
+                    distance = md
+                    nearestFood = elem
+            if nearestFood:
+                # Update stack of goals with [goal position, manhattan distance]
+                goals.append([nearestFood, distance])
+                # Remove closest node from coordinates list
+                coordinates.remove(nearestFood)
+
+    # Calculate final path cost based on distances in goals
+    final_path = 0
+    for goal in goals:
+        final_path += goal[1]
+
+    return final_path
+
     return 0
 
 class ClosestDotSearchAgent(SearchAgent):
