@@ -378,50 +378,60 @@ def cornersHeuristic(state, problem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
-    # Stack of distances
-    goals = []
     corners = list(state[1])
+    position = state[0]
 
     # Only keep distance values
     while True in corners:
         corners.remove(True)
 
-    while len(corners) > 0:
-        # If nothing is in goals, compare distances to current state
-        if len(goals) == 0:
-            distance = 999999
-            nearestCorner = None
-            # Get the smallest distance to goal from current state
-            for elem in corners:
-                md = abs(elem[0] - state[0][0]) + abs(elem[1] - state[0][1])
-                if distance > md:
-                    distance = md
-                    nearestCorner = elem
-            if nearestCorner:
-                # Update stack of goals with [goal position, manhattan distance]
-                goals.append([nearestCorner, distance])
-                # Remove closest node from corners list
-                corners.remove(nearestCorner)
+    for i in range(len(corners)):
+        elem = corners[i]
+        md = abs(elem[0] - position[0]) + abs(elem[1] - position[1])
+        corners[i] = [elem, md]
 
-        else:
+
+    # Sort list based on distance to position
+    corners = sorted(corners, key=lambda x:x[1])
+    final_path = 999999
+
+    if len(corners) == 0:
+        return 0
+
+    for elem in corners:
+        elem = elem[0]
+        # Stack of distances
+        goals = []
+        remaining = list(state[1])
+        while True in remaining:
+            remaining.remove(True)
+
+        remaining.remove(elem)
+
+        md = abs(elem[0] - position[0]) + abs(elem[1] - position[1])
+        goals.append([elem, md])
+        while len(remaining) > 0:
             distance = 999999
-            nearestCorner = None
+            nearestFood = None
             # Get the smallest distance to last appended goal in goals
-            for elem in corners:
+            for elem in remaining:
                 md = abs(elem[0] - goals[-1][0][0]) + abs(elem[1] - goals[-1][0][1])
                 if distance > md:
                     distance = md
-                    nearestCorner = elem
-            if nearestCorner:
+                    nearestFood = elem
+            if nearestFood:
                 # Update stack of goals with [goal position, manhattan distance]
-                goals.append([nearestCorner, distance])
-                # Remove closest node from corners list
-                corners.remove(nearestCorner)
+                goals.append([nearestFood, distance])
+                # Remove closest node from coordinates list
+                remaining.remove(nearestFood)
 
-    # Calculate final path cost based on distances in goals
-    final_path = 0
-    for goal in goals:
-        final_path += goal[1]
+        # Calculate final path cost based on distances in goals
+        new_final_path = 0
+        for goal in goals:
+            new_final_path += goal[1]
+
+        if new_final_path < final_path:
+            final_path = new_final_path
 
     return final_path
 
